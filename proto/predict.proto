@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package predict;
+
+import "google/protobuf/empty.proto";
+
+
+message PredictionsRequest {
+    // Name of model.
+    string model_name = 1; //required
+
+    // Version of model to run prediction on.
+    string model_version = 2; //optional
+
+    // Input data for model prediction
+    map<string, bytes> input = 3; //required
+
+    // SequenceId is required for StreamPredictions2 API.
+    optional string sequence_id = 4; //optional
+}
+
+message PredictionResponse {
+    // Response content for prediction
+    map<string, bytes> prediction = 1;
+    string model_name = 2;
+
+    // SequenceId is required for StreamPredictions2 API.
+    optional string sequence_id = 3; //optional
+}
+
+message MlServantHealthResponse {
+    // TorchServe health
+    string health = 1;
+}
+
+message CreateModelWorkerRequest {
+    string model_name = 1;
+    string model_path = 2;
+    int32 num_workers = 3;
+}
+
+
+message CreateModelWorkerResponse {
+    string status = 1;
+    string model_name = 2;
+}
+
+
+service Inference {
+    // Check health status of the TorchServe server.
+    rpc Ping(google.protobuf.Empty) returns (MlServantHealthResponse) {}
+
+    // Predictions entry point to get inference using default model version.
+    rpc Predictions(PredictionsRequest) returns (PredictionResponse) {}
+
+    rpc CreateModelWorker(CreateModelWorkerRequest) returns (CreateModelWorkerResponse) {}
+}
