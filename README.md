@@ -3,6 +3,13 @@
 
 # Machine model serving in Rust
 
+
+<img src="assets/logo.png" width="300px" style="display: block; margin: 0 auto;">
+
+
+---
+
+
 ```
 Serve your python models using Rust + GRPC service. Made for simplicity as a replacement of torchserve.
 ```
